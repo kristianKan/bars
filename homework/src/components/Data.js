@@ -2,7 +2,6 @@ import React from 'react'
 import { useGetDataQuery } from '../services/api'
 import DataGraphics from './DataGraphics'
 import styled, { keyframes } from 'styled-components'
-import csv from '../open_units.csv'
 
 const Container = styled.div`
   display: flex;
@@ -46,7 +45,7 @@ const Spinner = styled.div`
 const Data = () => {
   //const params = useParams()
 
-  const { data, error, isFetching } = useGetDataQuery(csv)
+  const { data, error, isFetching } = useGetDataQuery()
 
   return (
     <Container>

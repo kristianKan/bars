@@ -27,7 +27,7 @@ const DataGraphics = (props) => {
 
   const onClick = (d) => {
     dispatch(datumSliceActions.setSelected(d.id))
-    navigate(`/neo/${d.id}`)
+    navigate(`/datum/${d.id}`)
   }
 
   const onMouseOver = (e, d) => {
@@ -64,12 +64,13 @@ const DataGraphics = (props) => {
                 .style('stroke', 'black')
                 .attr('stroke-opacity', 0.4)
                 .attr('stroke-dasharray', '2,2')
+                .attr("transform", `translate(${-x.bandwidth() / 2},0)`)
               g.selectAll('.tick line')
                 .style('stroke', 'black')
                 .attr('stroke-opacity', 0.4)
               g.selectAll('.tick text')
-                .style('fill', '#ff00ff')
-                .attr('opacity', 0.4)
+                .style('fill', '#1b1602')
+                .attr('opacity', 0.8)
                 .attr("transform", `translate(${-x.bandwidth() / 2},0)`)
             })
         })
@@ -95,30 +96,28 @@ const DataGraphics = (props) => {
           (enter) => {
             return enter
               .append('circle')
-              .attr('cy', () => randomInt(-100, width + 100))
+              .attr('cy', () => randomInt(-height, height * 2))
               .attr('cx', d => x(d.volume))
+              .attr('r', (d) => 2)
               .style('fill', 'black')
               .transition()
               .duration(1000)
               .ease(customElastic)
               .attr('cx', getX(x))
               .attr('cy', (d, i) => y(d.yIndex)) 
-              .attr('r', (d) => 2)
           },
           (update) => {
             return update
               .transition()
               .duration(2000)
-              .style('fill', 'black')
               .attr('cx', getX(x))
               .attr('cy', (d, i) => y(d.yIndex)) 
-              .attr('r', (d) => 2)
           },
           (exit) => {
             exit
               .transition()
               .duration(1000)
-              .attr('cx', () => randomInt(-100, width + 100))
+              .attr('cy', () => randomInt(-100, width + 100))
               .attr('r', 0)
               .style('fill', 'transparent')
           }

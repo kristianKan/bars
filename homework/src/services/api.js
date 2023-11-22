@@ -1,12 +1,17 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { loadCsv } from './loadCsv'
 import { groupAndIndex } from './utils'
+import csv from '../open_units.csv'
 
 // pretend endpoint to load our data from
-const customBaseQuery = async (query) => {
+const customBaseQuery = async (id) => {
   try {
-    const data = await loadCsv(query)
-    return { data: groupAndIndex(data, 'quantity', 5) } 
+    const data = await loadCsv(csv)
+    if (id) {
+      return { data: data.find((d) => d.id === parseInt(id)) }
+    } else {
+      return { data: groupAndIndex(data, 'quantity', 5) } 
+    }
   } catch (error) {
     return { error }
   }
@@ -19,9 +24,12 @@ export const api = createApi({
   baseQuery: customBaseQuery,
   endpoints: (builder) => ({
     getData: builder.query({
-      query: (file) => file 
+      query: () => '' 
+    }),
+    getDataById: builder.query({
+      query: (id) => id
     }),
   }),
 })
 
-export const { useGetDataQuery } = api
+export const { useGetDataQuery, useGetDataByIdQuery } = api

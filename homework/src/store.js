@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { reducer as sliceReducer } from './features/datumSlice';
+import { reducer as datumSliceReducer } from './features/datumSlice';
 import { api } from './services/api';
 
 const reducer = {
   [api.reducerPath]: api.reducer,
-  slice: sliceReducer,
+  datumSlice: datumSliceReducer,
 };
 
 export const store = configureStore({
