@@ -6,7 +6,7 @@ import { groupAndIndex } from './utils'
 const customBaseQuery = async (query) => {
   try {
     const data = await loadCsv(query)
-    return { data: groupAndIndex(data, 'quantity', 100) } 
+    return { data: groupAndIndex(data, 'quantity', 5) } 
   } catch (error) {
     return { error }
   }

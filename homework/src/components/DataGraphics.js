@@ -95,8 +95,8 @@ const DataGraphics = (props) => {
           (enter) => {
             return enter
               .append('circle')
-              .attr('cx', () => randomInt(-100, width + 100))
-              .attr('cy', height / 2)
+              .attr('cy', () => randomInt(-100, width + 100))
+              .attr('cx', d => x(d.volume))
               .style('fill', 'black')
               .transition()
               .duration(1000)

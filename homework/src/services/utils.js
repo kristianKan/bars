@@ -17,12 +17,12 @@ const groupAndIndex = function(data, key, limit) {
     if (!acc[groupKey]) {
       acc[groupKey] = { values: [], yIndex: 0, xIndex: 0 };
     }
-    if (acc[groupKey].yIndex >= limit) {
-      acc[groupKey].yIndex = 0;
-      acc[groupKey].xIndex++;
+    if (acc[groupKey].xIndex >= limit) {
+      acc[groupKey].xIndex = 0;
+      acc[groupKey].yIndex++;
     }
-    row.yIndex = acc[groupKey].yIndex++;
-    row.xIndex = acc[groupKey].xIndex;
+    row.xIndex = acc[groupKey].xIndex++;
+    row.yIndex = acc[groupKey].yIndex;
     acc[groupKey].values.push(row);
     return acc;
   }, {});
