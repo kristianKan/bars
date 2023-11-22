@@ -87,7 +87,7 @@ const Datum = (_) => {
             <Col style={{ fontWeight: 'bold' }}>
               <Row>{data.brand}</Row>
               <Row>{data.category}</Row>
-              <Row>{data.style}</Row>
+              <Row>{data.style ? data.style : 'n/a'}</Row>
               <Row>{data.quantity} {data['quantity units']}</Row>
               <Row>{data.abv}</Row>
               <Row>{data.package}</Row>
