@@ -113,7 +113,7 @@ const DataGraphics = (props) => {
               .attr("cy", () => randomInt(-height, height * 2))
               .attr("cx", d => x(d[category]))
               .attr("r", 2)
-              .style("fill", "black")
+              .style("fill", (d) => d.category === "Beer" ? "black" : "orangered")
               .transition()
               .duration(1000)
               .ease(customElastic)

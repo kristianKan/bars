@@ -22,7 +22,7 @@ const Details = styled.section`
 `
 
 const StyledH1 = styled.h1`
-  color: #ff00ff;
+  color: #ffa5ff;
   font-size: 50px;
 `
 

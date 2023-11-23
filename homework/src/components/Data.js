@@ -16,7 +16,7 @@ const Container = styled.div`
 const Header = styled.div``
 
 const StyledH1 = styled.h1`
-  color: #ff00ff;
+  color: #ffa5ff;
   font-size: 50px;
 `
 
@@ -45,6 +45,10 @@ const Spinner = styled.div`
   animation-iteration-count: infinite;
 `
 
+const Selector = styled.select`
+  background-color: transparent;
+`
+
 const Data = () => {
   const dispatch = useDispatch()
 
@@ -62,10 +66,10 @@ const Data = () => {
       {isFetching ? <Spinner>🌚</Spinner> : null}
       <Header>
         <StyledH1>Beverages</StyledH1>
-        <select value={selectedCategory} onChange={handleCategoryChange}>
+        <Selector value={selectedCategory} onChange={handleCategoryChange}>
           <option value="volume">quantity</option>
           <option value="abv">abv</option>
-        </select>
+        </Selector>
       </Header>
       {error ? (
         <Error>{error.message}</Error>
