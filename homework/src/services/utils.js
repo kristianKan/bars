@@ -21,9 +21,12 @@ const groupAndIndex = function(data, key, limit) {
       acc[groupKey].xIndex = 0;
       acc[groupKey].yIndex++;
     }
-    row.xIndex = acc[groupKey].xIndex++;
-    row.yIndex = acc[groupKey].yIndex;
-    acc[groupKey].values.push(row);
+    const newRow = {
+      ...row, // copy all existing properties
+      xIndex: acc[groupKey].xIndex++,
+      yIndex: acc[groupKey].yIndex,
+    };
+    acc[groupKey].values.push(newRow);
     return acc;
   }, {});
 
@@ -32,4 +35,23 @@ const groupAndIndex = function(data, key, limit) {
   return indexed.flat();
 }
 
-export { processData, groupAndIndex }
+const getUniqueKeys = function(data, key) {
+  const keys = [];
+  const counts = {};
+
+  data.forEach(row => {
+    if (!counts[row[key]]) {
+      keys.push(row[key]);
+      counts[row[key]] = 1;
+    } else {
+      counts[row[key]]++;
+    }
+  });
+
+  return {
+    keys: keys.sort((a, b) => a - b),
+    counts: counts
+  };
+}
+
+export { processData, groupAndIndex, getUniqueKeys }

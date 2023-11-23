@@ -1,7 +1,10 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { setSelectedCategory, selectIndexedData } from '../features/dataSlice';
 import { useGetDataQuery } from '../services/api'
 import DataGraphics from './DataGraphics'
 import styled, { keyframes } from 'styled-components'
+import { selectUniqueKeys } from '../features/dataSlice'
 
 const Container = styled.div`
   display: flex;
@@ -43,20 +46,31 @@ const Spinner = styled.div`
 `
 
 const Data = () => {
-  //const params = useParams()
+  const dispatch = useDispatch();
 
   const { data, error, isFetching } = useGetDataQuery()
+  const indexedData = useSelector(selectIndexedData);
+  const selectedCategory = useSelector(state => state.category);
+  const keys = useSelector(selectUniqueKeys)
+
+  const handleCategoryChange = (event) => {
+    dispatch(setSelectedCategory(event.target.value));
+  };
 
   return (
     <Container>
       {isFetching ? <Spinner>🌚</Spinner> : null}
       <Header>
         <StyledH1>Beverages</StyledH1>
+        <select value={selectedCategory} onChange={handleCategoryChange}>
+          <option value="volume">quantity</option>
+          <option value="abv">abv</option>
+        </select>
       </Header>
       {error ? (
         <Error>Oh no... {error.error}</Error>
       ) : data ? (
-        <DataGraphics data={data} />
+        <DataGraphics data={indexedData} keys={keys} category={selectedCategory} />
       ) : null}
     </Container>
   )

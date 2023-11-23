@@ -1,6 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { loadCsv } from './loadCsv'
-import { groupAndIndex } from './utils'
 import csv from '../open_units.csv'
 
 // pretend endpoint to load our data from
@@ -10,7 +9,7 @@ const customBaseQuery = async (id) => {
     if (id) {
       return { data: data.find((d) => d.id === parseInt(id)) }
     } else {
-      return { data: groupAndIndex(data, 'quantity', 5) } 
+      return { data } 
     }
   } catch (error) {
     return { error }

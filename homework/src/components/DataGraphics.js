@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import * as d3 from 'd3'
 import { actions as datumSliceActions } from '../features/datumSlice'
-import { getUniqueKeys } from './utils'
 
 // side margin
 const MARGIN = 40
@@ -16,6 +15,8 @@ const DataGraphics = (props) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const ref = useRef(null)
+
+
 
   // an ease function to make animation more funky
   const customElastic = d3.easeElastic.period(0.6)
@@ -77,17 +78,17 @@ const DataGraphics = (props) => {
     }
   }
 
-  const getX = (x) => {
+  const getX = (x, category) => {
     return (d) => {
       if (d.xIndex % 2 === 1) {
-        return x(d.volume) + d.xIndex * -3 - 3 
+        return x(d[category]) + d.xIndex * -3 - 3 
       } else {
-        return x(d.volume) + d.xIndex * 3
+        return x(d[category]) + d.xIndex * 3
       }
     }
   }
 
-  const drawCircles = ({ data, height, width, x, y, r }) => {
+  const drawCircles = ({ data, height, width, x, y, r, category }) => {
     return (node) => {
       node
         .selectAll('circle')
@@ -97,20 +98,20 @@ const DataGraphics = (props) => {
             return enter
               .append('circle')
               .attr('cy', () => randomInt(-height, height * 2))
-              .attr('cx', d => x(d.volume))
+              .attr('cx', d => x(d[category]))
               .attr('r', (d) => 2)
               .style('fill', 'black')
               .transition()
               .duration(1000)
               .ease(customElastic)
-              .attr('cx', getX(x))
+              .attr('cx', getX(x, category))
               .attr('cy', (d, i) => y(d.yIndex)) 
           },
           (update) => {
             return update
               .transition()
               .duration(2000)
-              .attr('cx', getX(x))
+              .attr('cx', getX(x, category))
               .attr('cy', (d, i) => y(d.yIndex)) 
           },
           (exit) => {
@@ -135,13 +136,11 @@ const DataGraphics = (props) => {
       return null
     }
 
-    const data = props.data 
+    const { data, keys, category } = props 
 
     // some quick and dirty layout calculations
     let height = ref.current.parentElement.offsetHeight - TOP - MARGIN * 2
     let width = ref.current.parentElement.offsetWidth - MARGIN * 2
-
-    const { keys } = getUniqueKeys(data, 'volume')
 
     // set x scale to map categories to pixels
     const x = d3
@@ -151,7 +150,7 @@ const DataGraphics = (props) => {
 
     const y = d3
       .scaleBand()
-      .domain(data.map((d) => d.yIndex)) // Use the index as the domain
+      .domain(Array.from({ length: 100 }, (_, index) => index)) // Use the index as the domain
       .range([height - PADDING, PADDING]) // Map the domain to the height of the SVG
       .padding(0.1); // Add some padding between the circles
 
@@ -166,7 +165,7 @@ const DataGraphics = (props) => {
       .attr('height', height)
       .attr('width', width)
       .call(drawAxis({ x, height }))
-      .call(drawCircles({ data, height, width, x, y, r }))
+      .call(drawCircles({ data, height, width, x, y, r, category }))
   })
 
   return <svg ref={ref} />
