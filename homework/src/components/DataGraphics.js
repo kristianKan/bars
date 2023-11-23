@@ -43,7 +43,7 @@ const DataGraphics = (props) => {
     circle.attr("r", circle.attr("r") / 2)
   }
 
-  const drawAxis = ({ x, height }) => {
+  const drawAxis = ({ x, height, category }) => {
     // display the first and the last tick values only
     const axis = d3.axisBottom(x)
       .tickSize(0)
@@ -53,7 +53,7 @@ const DataGraphics = (props) => {
     return (node) => {
       node
         .selectAll(".axis")
-        .data(["dummy"])
+        .data([category])
         .join((enter) => {
           return enter
             .append("g")
@@ -73,6 +73,19 @@ const DataGraphics = (props) => {
                 .style("fill", "#1b1602")
                 .attr("opacity", 0.8)
                 .attr("transform", `translate(${-x.bandwidth() / 2},0)`)
+            })
+        }, (update) => {
+          return update
+            .call(axis)
+            .call((g) => {
+              g.select(".domain")
+                .attr("transform", `translate(${-x.bandwidth() / 2},0)`)
+              g.selectAll(".tick text")
+                .attr("transform", () => {
+                  return category === "abv" 
+                    ? `translate(${-x.bandwidth() * 2}, ${x.bandwidth() / 2 + 5}) rotate(-90)`
+                    : `translate(${-x.bandwidth() / 2},0)`
+                })
             })
         })
     }
@@ -145,20 +158,21 @@ const DataGraphics = (props) => {
     // set x scale to map categories to pixels
     const x = d3
       .scaleBand()
-      .domain(keys) // keys in a category
-      .range([PADDING, width - PADDING]) // pixels on screen
+      .domain(keys) // Use keys in the selected category
+      .range([PADDING, width - PADDING]) // Map the domain to the height of the SVG
 
     const y = d3
       .scaleBand()
       .domain(Array.from({ length: 100 }, (_, index) => index)) // Use the index as the domain
-      .range([height - PADDING, PADDING]) // Map the domain to the height of the SVG
-      .padding(0.1) // Add some padding between the circles
+      .range([height - PADDING, PADDING])       .padding(0.1) // Add some padding between the circles
 
     // select ref and draw all components
     d3.select(ref.current)
       .attr("height", height)
       .attr("width", width)
-      .call(drawAxis({ x, height }))
+      // draw axis first so that circles are on top of it
+      .call(drawAxis({ x, height, category }))
+      // draw circles
       .call(drawCircles({ data, height, width, x, y, category }))
   })
 
