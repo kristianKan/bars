@@ -11,8 +11,11 @@ const processData = function(results) {
   })
 }
 
-const groupAndIndex = function(data, key, limit) {
-  const grouped = data.reduce((acc, row) => {
+const groupAndIndex = function(data, key) {
+  const limit = key === "abv" ? 2 : 5
+  // Sort the data by the category in alphabetical order
+  const sortedData = [...data].sort((a, b) => b.category.localeCompare(a.category))
+  const grouped = sortedData.reduce((acc, row) => {
     const groupKey = row[key]
     if (!acc[groupKey]) {
       acc[groupKey] = { values: [], yIndex: 0, xIndex: 0 }

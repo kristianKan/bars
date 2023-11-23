@@ -6,7 +6,7 @@ export const selectIndexedData = createSelector(
   state => state.category,
   (data, category) => {
     return category && data
-      ? groupAndIndex(data, category, 5)
+      ? groupAndIndex(data, category)
       : data
   }
 )
