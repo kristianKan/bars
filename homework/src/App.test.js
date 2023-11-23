@@ -1,42 +1,42 @@
-import { render, screen } from '@testing-library/react';
-import { setupServer } from 'msw/node';
-import { rest } from 'msw';
-import App from './App';
+import { render, screen } from "@testing-library/react"
+import { setupServer } from "msw/node"
+import { rest } from "msw"
+import App from "./App"
 
 // Set up the mock server
 const server = setupServer(
-  rest.get('/api/data', (req, res, ctx) => {
-    return res(ctx.json({ data: 'mock data' }));
+  rest.get("/api/data", (req, res, ctx) => {
+    return res(ctx.json({ data: "mock data" }))
   })
-);
+)
 
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+beforeAll(() => server.listen())
+afterEach(() => server.resetHandlers())
+afterAll(() => server.close())
 
-test('renders app', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/Beverages/i);
-  expect(linkElement).toBeInTheDocument();
-});
+test("renders app", () => {
+  render(<App />)
+  const linkElement = screen.getByText(/Beverages/i)
+  expect(linkElement).toBeInTheDocument()
+})
 
-test('displays data when fetch is successful', async () => {
-  render(<App />);
+test("displays data when fetch is successful", async () => {
+  render(<App />)
 
   // Wait for the DataGraphics component to load
-  const dataGraphics = await screen.findByTestId('data-graphics', {}, { timeout: 1000 });
+  const dataGraphics = await screen.findByTestId("data-graphics", {}, { timeout: 1000 })
 
   // Check that the data is displayed
-  expect(dataGraphics).toBeInTheDocument();
-});
+  expect(dataGraphics).toBeInTheDocument()
+})
 
-test('displays error message', async () => {
-  render(<App />);
+test("displays error message", async () => {
+  render(<App />)
   
   // Wait for the data to load
-  expect(screen.getByText('🌚')).toBeInTheDocument();
+  expect(screen.getByText("🌚")).toBeInTheDocument()
 
   // Display error if no data is loaded
-  const errorMessage = await screen.findByText('oh, no! No data', {}, { timeout: 1000 });
-  expect(errorMessage).toBeInTheDocument();
-});
+  const errorMessage = await screen.findByText("oh, no! No data", {}, { timeout: 1000 })
+  expect(errorMessage).toBeInTheDocument()
+})

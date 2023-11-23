@@ -1,8 +1,8 @@
-import React, { useRef, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import * as d3 from 'd3'
-import { actions as datumSliceActions } from '../features/datumSlice'
+import React, { useRef, useEffect } from "react"
+import { useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import * as d3 from "d3"
+import { actions as datumSliceActions } from "../features/datumSlice"
 
 // side margin
 const MARGIN = 40
@@ -31,47 +31,47 @@ const DataGraphics = (props) => {
     navigate(`/datum/${d.id}`)
   }
 
-  const onMouseOver = (e, d) => {
+  const onMouseOver = (e) => {
     const circle = d3.select(e.currentTarget)
     // magnify radius by the factor of 2
-    circle.attr('r', circle.attr('r') * 2)
+    circle.attr("r", circle.attr("r") * 2)
   }
 
-  const onMouseOut = (e, d) => {
+  const onMouseOut = (e) => {
     const circle = d3.select(e.currentTarget)
     // set radius to its original value
-    circle.attr('r', circle.attr('r') / 2)
+    circle.attr("r", circle.attr("r") / 2)
   }
 
   const drawAxis = ({ x, height }) => {
     // display the first and the last tick values only
     const axis = d3.axisBottom(x)
-    .tickSize(0)
-    .tickPadding(10)
+      .tickSize(0)
+      .tickPadding(10)
 
     // since x axis is absolute it's not updated
     return (node) => {
       node
-        .selectAll('.axis')
-        .data(['dummy'])
+        .selectAll(".axis")
+        .data(["dummy"])
         .join((enter) => {
           return enter
-            .append('g')
-            .attr('class', 'axis')
-            .attr('transform', `translate(0, ${height - PADDING})`)
+            .append("g")
+            .attr("class", "axis")
+            .attr("transform", `translate(0, ${height - PADDING})`)
             .call(axis)
             .call((g) => {
-              g.select('.domain')
-                .style('stroke', 'black')
-                .attr('stroke-opacity', 0.4)
-                .attr('stroke-dasharray', '2,2')
+              g.select(".domain")
+                .style("stroke", "black")
+                .attr("stroke-opacity", 0.4)
+                .attr("stroke-dasharray", "2,2")
                 .attr("transform", `translate(${-x.bandwidth() / 2},0)`)
-              g.selectAll('.tick line')
-                .style('stroke', 'black')
-                .attr('stroke-opacity', 0.4)
-              g.selectAll('.tick text')
-                .style('fill', '#1b1602')
-                .attr('opacity', 0.8)
+              g.selectAll(".tick line")
+                .style("stroke", "black")
+                .attr("stroke-opacity", 0.4)
+              g.selectAll(".tick text")
+                .style("fill", "#1b1602")
+                .attr("opacity", 0.8)
                 .attr("transform", `translate(${-x.bandwidth() / 2},0)`)
             })
         })
@@ -88,45 +88,45 @@ const DataGraphics = (props) => {
     }
   }
 
-  const drawCircles = ({ data, height, width, x, y, r, category }) => {
+  const drawCircles = ({ data, height, width, x, y, category }) => {
     return (node) => {
       node
-        .selectAll('circle')
+        .selectAll("circle")
         .data(data, (d) => d.id)
         .join(
           (enter) => {
             return enter
-              .append('circle')
-              .attr('cy', () => randomInt(-height, height * 2))
-              .attr('cx', d => x(d[category]))
-              .attr('r', (d) => 2)
-              .style('fill', 'black')
+              .append("circle")
+              .attr("cy", () => randomInt(-height, height * 2))
+              .attr("cx", d => x(d[category]))
+              .attr("r", 2)
+              .style("fill", "black")
               .transition()
               .duration(1000)
               .ease(customElastic)
-              .attr('cx', getX(x, category))
-              .attr('cy', (d, i) => y(d.yIndex)) 
+              .attr("cx", getX(x, category))
+              .attr("cy", (d) => y(d.yIndex)) 
           },
           (update) => {
             return update
               .transition()
               .duration(2000)
-              .attr('cx', getX(x, category))
-              .attr('cy', (d, i) => y(d.yIndex)) 
+              .attr("cx", getX(x, category))
+              .attr("cy", (d) => y(d.yIndex)) 
           },
           (exit) => {
             exit
               .transition()
               .duration(1000)
-              .attr('cy', () => randomInt(-100, width + 100))
-              .attr('r', 0)
-              .style('fill', 'transparent')
+              .attr("cy", () => randomInt(-100, width + 100))
+              .attr("r", 0)
+              .style("fill", "transparent")
           }
         )
-        .attr('cursor', 'pointer')
-        .on('click', (e, d) => onClick(d))
-        .on('mouseover', (e, d) => onMouseOver(e, d))
-        .on('mouseout', (e, d) => onMouseOut(e, d))
+        .attr("cursor", "pointer")
+        .on("click", (_, d) => onClick(d))
+        .on("mouseover", (e, d) => onMouseOver(e, d))
+        .on("mouseout", (e, d) => onMouseOut(e, d))
     }
   }
 
@@ -145,27 +145,21 @@ const DataGraphics = (props) => {
     // set x scale to map categories to pixels
     const x = d3
       .scaleBand()
-      .domain(keys) // volumes
-      .range([PADDING, width - PADDING]) // pixels
+      .domain(keys) // keys in a category
+      .range([PADDING, width - PADDING]) // pixels on screen
 
     const y = d3
       .scaleBand()
       .domain(Array.from({ length: 100 }, (_, index) => index)) // Use the index as the domain
       .range([height - PADDING, PADDING]) // Map the domain to the height of the SVG
-      .padding(0.1); // Add some padding between the circles
-
-    // set r scale to map magnitude to circle radius
-    const r = d3
-      .scaleLinear()
-      .domain(d3.extent(data, (d) => d.volume))
-      .range([2, 10])
+      .padding(0.1) // Add some padding between the circles
 
     // select ref and draw all components
     d3.select(ref.current)
-      .attr('height', height)
-      .attr('width', width)
+      .attr("height", height)
+      .attr("width", width)
       .call(drawAxis({ x, height }))
-      .call(drawCircles({ data, height, width, x, y, r, category }))
+      .call(drawCircles({ data, height, width, x, y, category }))
   })
 
   return <svg ref={ref} />

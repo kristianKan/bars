@@ -1,10 +1,10 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedCategory, selectIndexedData } from '../features/dataSlice';
-import { useGetDataQuery } from '../services/api'
-import DataGraphics from './DataGraphics'
-import styled, { keyframes } from 'styled-components'
-import { selectUniqueKeys } from '../features/dataSlice'
+import React from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { setSelectedCategory, selectIndexedData } from "../features/dataSlice"
+import { useGetDataQuery } from "../services/api"
+import DataGraphics from "./DataGraphics"
+import styled, { keyframes } from "styled-components"
+import { selectUniqueKeys } from "../features/dataSlice"
 
 const Container = styled.div`
   display: flex;
@@ -46,16 +46,16 @@ const Spinner = styled.div`
 `
 
 const Data = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const { data, error, isFetching } = useGetDataQuery()
-  const indexedData = useSelector(selectIndexedData);
-  const selectedCategory = useSelector(state => state.category);
+  const indexedData = useSelector(selectIndexedData)
+  const selectedCategory = useSelector(state => state.category)
   const keys = useSelector(selectUniqueKeys)
 
   const handleCategoryChange = (event) => {
-    dispatch(setSelectedCategory(event.target.value));
-  };
+    dispatch(setSelectedCategory(event.target.value))
+  }
 
   return (
     <Container>

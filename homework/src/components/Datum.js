@@ -1,7 +1,7 @@
-import React from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { useGetDataByIdQuery } from '../services/api'
-import styled, { keyframes } from 'styled-components'
+import React from "react"
+import { useParams, Link } from "react-router-dom"
+import { useGetDataByIdQuery } from "../services/api"
+import styled, { keyframes } from "styled-components"
 
 const Container = styled.div`
   margin: 40px;
@@ -59,7 +59,7 @@ const Col = styled.div`
   padding-right: 12px;
 `
 
-const Datum = (_) => {
+const Datum = () => {
   const { id } = useParams()
 
   const { data, error, isFetching } = useGetDataByIdQuery(id)
@@ -76,7 +76,7 @@ const Datum = (_) => {
         <>
           <StyledH1>{data.product}</StyledH1>
           <Details>
-            <Col style={{ textAlign: 'right' }}>
+            <Col style={{ textAlign: "right" }}>
               <Row>brand</Row>
               <Row>category</Row>
               <Row>style</Row>
@@ -84,11 +84,11 @@ const Datum = (_) => {
               <Row>ABV</Row>
               <Row>package</Row>
             </Col>
-            <Col style={{ fontWeight: 'bold' }}>
+            <Col style={{ fontWeight: "bold" }}>
               <Row>{data.brand}</Row>
               <Row>{data.category}</Row>
-              <Row>{data.style ? data.style : 'n/a'}</Row>
-              <Row>{data.quantity} {data['quantity units']}</Row>
+              <Row>{data.style ? data.style : "n/a"}</Row>
+              <Row>{data.quantity} {data["quantity units"]}</Row>
               <Row>{data.abv}</Row>
               <Row>{data.package}</Row>
             </Col>

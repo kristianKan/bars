@@ -1,38 +1,38 @@
-import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { groupAndIndex, getUniqueKeys } from '../services/utils'
+import { createSlice, createSelector } from "@reduxjs/toolkit"
+import { groupAndIndex, getUniqueKeys } from "../services/utils"
 
 export const selectIndexedData = createSelector(
-  state => state.beverages.queries['getData(undefined)']?.data,
+  state => state.beverages.queries["getData(undefined)"]?.data,
   state => state.category,
   (data, category) => {
     return category && data
       ? groupAndIndex(data, category, 5)
-      : data;
+      : data
   }
-);
+)
 
 export const selectUniqueKeys = createSelector(
-  state => state.beverages.queries['getData(undefined)']?.data,
+  state => state.beverages.queries["getData(undefined)"]?.data,
   state => state.category,
   (data, category) => {
     if (!data) {
       return []
     }
-    const { keys } = getUniqueKeys(data, category);
-    return keys;
+    const { keys } = getUniqueKeys(data, category)
+    return keys
   }
-);
+)
 
 const categorySlice = createSlice({
-  name: 'category',
-  initialState: 'volume',
+  name: "category",
+  initialState: "volume",
   reducers: {
     setSelectedCategory: (state, action) => {
-      return action.payload;
+      return action.payload
     },
   },
-});
+})
 
-export const { setSelectedCategory } = categorySlice.actions;
+export const { setSelectedCategory } = categorySlice.actions
 
-export default categorySlice.reducer;
+export default categorySlice.reducer
