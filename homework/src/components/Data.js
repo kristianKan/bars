@@ -68,9 +68,9 @@ const Data = () => {
         </select>
       </Header>
       {error ? (
-        <Error>Oh no... {error.error}</Error>
+        <Error>{error.message}</Error>
       ) : data ? (
-        <DataGraphics data={indexedData} keys={keys} category={selectedCategory} />
+        <DataGraphics data={indexedData} keys={keys} category={selectedCategory} data-testid="data-graphics" />
       ) : null}
     </Container>
   )

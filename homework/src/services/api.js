@@ -12,7 +12,7 @@ const customBaseQuery = async (id) => {
       return { data } 
     }
   } catch (error) {
-    return { error }
+    return { error: { status: 500, message: 'oh, no! No data'  } }
   }
 }
 
